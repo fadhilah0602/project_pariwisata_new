@@ -31,7 +31,7 @@ class DetailPariwisata extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     child: data != null && data!.gambar.isNotEmpty
                         ? Image.network(
-                      'http://192.168.42.233/pariwisata/${data!.gambar}',
+                      'http://192.168.43.99/pariwisata/${data!.gambar}',
                       fit: BoxFit.fill,
                       width: 300,
                       height: 200,
@@ -101,21 +101,21 @@ class DetailPariwisata extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "id_kategori : ${data?.id_kategori ?? 'No Content'}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Rubik',
-                        ),
-                      ),
-                    ],
-                  ),
+                  // SizedBox(height: 20),
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     Text(
+                  //       "id_kategori : ${data?.id_kategori ?? 'No Content'}",
+                  //       textAlign: TextAlign.left,
+                  //       style: TextStyle(
+                  //         fontSize: 18,
+                  //         fontWeight: FontWeight.bold,
+                  //         fontFamily: 'Rubik',
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(height: 50),
                   // Tampilkan tombol "add to pesanan" jika id_kategori == 1
                   // if (data?.id_kategori == 1)

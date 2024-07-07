@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:project_pariwisata_new/page/register.dart';
+import 'package:provider/provider.dart';
 
 import '../model/model_login.dart';
+import '../model/model_user.dart';
 import '../util/session_manager.dart';
+import 'auth_service.dart';
 import 'forgot_password.dart';
 import 'package:http/http.dart' as http;
 
+import 'home_admin_page.dart';
 import 'home_page.dart';
 import 'navigation_page.dart';
 
@@ -36,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       http.Response res = await http.post(
-        Uri.parse('http://192.168.42.233/pariwisata/login.php'),
+        Uri.parse('http://192.168.43.99/pariwisata/login.php'),
         body: {
           "login": "1",
           "email": txtEmail.text,
@@ -68,6 +72,36 @@ class _LoginScreenState extends State<LoginScreen> {
               data.data.role,
             );
 
+            // Use AuthService to set the current user
+            final authService = Provider.of<AuthService>(context, listen: false);
+            authService.setCurrentUser(ModelUsers(
+              id_user: data.data.id_user,
+              username: data.data.username,
+              email: data.data.email,
+              no_hp: data.data.no_hp,
+              jenis_kelamin: data.data.jenis_kelamin,
+              alamat: data.data.alamat,
+              fullname: data.data.fullname,
+              role: data.data.role,
+            ));
+
+            // Navigate to the appropriate screen based on user role
+            if (data.data.role == 'Admin') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => PariwisataScreen()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => PageMulai(pageController: pageController)),
+              );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => NavigationPage()),
+              );
+            }
+
             print('Nilai sesi disimpan:');
             print('ID user: ${data.data.id_user}');
             print('Username: ${data.data.username}');
@@ -75,14 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('${data.pesan}')));
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => PageMulai(pageController: pageController)),
-            );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => NavigationPage()),
-            );
           } else {
             throw Exception('Data pengguna tidak lengkap atau null');
           }

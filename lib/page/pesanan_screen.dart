@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:project_pariwisata_new/page/penilaian_screen.dart';
 
 import '../model/model_pesanan.dart';
 import '../model/model_user.dart';
@@ -37,7 +38,7 @@ class _PesananScreen extends State<PesananScreen> with WidgetsBindingObserver {
 
   Future<void> _fetchPesanan() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.42.233/pariwisata/listPesanan.php?id_user=${sessionManager.id_user}'));
+      final response = await http.get(Uri.parse('http://192.168.43.99/pariwisata/listPesanan.php?id_user=${sessionManager.id_user}'));
       if (response.statusCode == 200) {
         final parsed = jsonDecode(response.body);
         setState(() {
@@ -58,7 +59,7 @@ class _PesananScreen extends State<PesananScreen> with WidgetsBindingObserver {
   }
 
   Future<void> deletePesanan(String idPesanan) async {
-    final String apiUrl = 'http://192.168.42.233/pariwisata/deletePesanan.php';
+    final String apiUrl = 'http://192.168.43.99/pariwisata/deletePesanan.php';
 
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -141,10 +142,10 @@ class _PesananScreen extends State<PesananScreen> with WidgetsBindingObserver {
         );
         break;
       case 2:
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => OrderScreen()),
-        // );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PenilaianScreen()),
+        );
         break;
       case 3:
         Navigator.pushReplacement(
@@ -208,7 +209,7 @@ class _PesananScreen extends State<PesananScreen> with WidgetsBindingObserver {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image.network(
-                              'http://192.168.42.233/pariwisata/${pesanan.gambar}', // URL gambar
+                              'http://192.168.43.99/pariwisata/${pesanan.gambar}', // URL gambar
                               height: 200,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -297,17 +298,13 @@ class _PesananScreen extends State<PesananScreen> with WidgetsBindingObserver {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.shopping_cart),
-          //   label: 'Keranjang',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmarks_outlined),
             label: 'Pesanan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favourite',
+            icon: Icon(Icons.star),
+            label: 'Rating',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

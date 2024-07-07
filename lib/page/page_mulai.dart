@@ -128,7 +128,7 @@ class _PageMulaiState extends State<PageMulai> with WidgetsBindingObserver {
   }
   Future<void> _fetchKategori() async {
     final response =
-    await http.get(Uri.parse('http://192.168.42.233/kelompok4/kategori.php'));
+    await http.get(Uri.parse('http://192.168.43.99/kelompok4/kategori.php'));
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body);
       setState(() {

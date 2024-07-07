@@ -44,7 +44,7 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Setting'),
-        backgroundColor: Color(0xFF87CEEB), // Sesuaikan dengan warna tema aplikasi Anda
+        backgroundColor: Color(0xFF88AB8E), // Sesuaikan dengan warna tema aplikasi Anda
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

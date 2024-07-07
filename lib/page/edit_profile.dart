@@ -74,7 +74,7 @@ class _EditProfileState extends State<EditProfile> {
     // }
 
     try {
-      var url = Uri.parse('http://192.168.42.233/pariwisata/updateUser.php');
+      var url = Uri.parse('http://192.168.43.99/pariwisata/updateUser.php');
       var response = await http.post(url, body: {
         'id_user': widget.currentUser.id_user.toString(),
         'username': newUsername,

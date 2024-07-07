@@ -34,7 +34,7 @@ class _AddPesananState extends State<AddPesanan> {
   Future<void> _addToPesanan(Pariwisata pariwisata) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.42.233/pariwisata/addPesanan.php'),
+        Uri.parse('http://192.168.43.99/pariwisata/addPesanan.php'),
         body: {
           'id_user': sessionManager.id_user,
           'id_pariwisata': pariwisata.id_pariwisata,

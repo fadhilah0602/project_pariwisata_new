@@ -624,6 +624,7 @@ import '../util/session_manager.dart';
 import 'detail_pariwisata.dart';
 import 'login.dart';
 import 'navigation_page.dart';
+import 'penilaian_screen.dart';
 import 'pesanan_screen.dart';
 import 'profile.dart';
 import 'setting.dart';
@@ -774,8 +775,8 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
     try {
       // Sesuaikan URL berdasarkan idKategori
       String url = idKategori == null
-          ? 'http://192.168.42.233/pariwisata/pariwisata.php'
-          : 'http://192.168.42.233/pariwisata/pariwisata.php?id_kategori=$idKategori';
+          ? 'http://192.168.43.99/pariwisata/pariwisata.php'
+          : 'http://192.168.43.99/pariwisata/pariwisata.php?id_kategori=$idKategori';
 
       http.Response res = await http.get(Uri.parse(url));
       if (res.statusCode == 200) {
@@ -803,7 +804,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
   // Future<void> fetchPariwisata({String? idKategori}) async {
   //   try {
   //     http.Response res =
-  //     await http.get(Uri.parse('http://192.168.42.233/pariwisata/pariwisata.php?id_kategori=$idKategori'));
+  //     await http.get(Uri.parse('http://192.168.43.99/pariwisata/pariwisata.php?id_kategori=$idKategori'));
   //     if (res.statusCode == 200) {
   //       var decodedResponse = modelPariwisataFromJson(res.body);
   //       if (decodedResponse.isSuccess && decodedResponse.data != null) {
@@ -834,7 +835,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
   Future<void> fetchCategories() async {
     try {
       http.Response res =
-      await http.get(Uri.parse('http://192.168.42.233/pariwisata/kategori.php'));
+      await http.get(Uri.parse('http://192.168.43.99/pariwisata/kategori.php'));
       setState(() {
         _categories = modelKategoriFromJson(res.body).data ?? [];
       });
@@ -862,7 +863,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
   }
 
   // Future<void> addFavourite(int id_pariwisata) async {
-  //   final url = 'http://192.168.42.233/kelompok4/addFavourite.php';
+  //   final url = 'http://192.168.43.99/kelompok4/addFavourite.php';
   //   final response = await http.post(
   //     Uri.parse(url),
   //     headers: {'Content-Type': 'application/json'},
@@ -905,7 +906,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
 
   // Future<void> _fetchKategori() async {
   //   final response =
-  //   await http.get(Uri.parse('http://192.168.42.233/kelompok4/kategori.php'));
+  //   await http.get(Uri.parse('http://192.168.43.99/kelompok4/kategori.php'));
   //   if (response.statusCode == 200) {
   //     final parsed = jsonDecode(response.body);
   //     setState(() {
@@ -938,20 +939,13 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
         );
         break;
       case 2:
-      // Navigasi ke halaman Pesanan
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => OrderScreen()),
-      //   );
+      //Navigasi ke halaman Pesanan
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PenilaianScreen()),
+        );
         break;
       case 3:
-      // Navigasi ke halaman Pesanan
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => FavouriteScreen()),
-      //   );
-        break;
-      case 4:
 
         Navigator.push(
           context,
@@ -1141,7 +1135,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
                 _categories.isEmpty
                     ? CircularProgressIndicator() // Show loading indicator while fetching data
                     : DefaultTabController(
-                  length: _categories.length + 1,
+                  length: _categories.length ,
                   child: Column(
                     children: [
                       Padding(
@@ -1303,7 +1297,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
                                 ),
                                 child: Image.network(
                                   // Menggunakan URL gambar dari model pariwisata
-                                  'http://192.168.42.233/pariwisata/${pariwisata.gambar}',
+                                  'http://192.168.43.99/pariwisata/${pariwisata.gambar}',
                                   height: 150,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -1356,17 +1350,13 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.shopping_cart),
-          //   label: 'Keranjang',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmarks_outlined),
             label: 'Pesanan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favourite',
+            icon: Icon(Icons.star),
+            label: 'Rating',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -1410,7 +1400,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
 //   }
 //
 //   Future<void> fetchProduk() async {
-//     final response = await http.get(Uri.parse('http://192.168.42.233/kelompok4/pariwisata.php'));
+//     final response = await http.get(Uri.parse('http://192.168.43.99/kelompok4/pariwisata.php'));
 //     if (response.statusCode == 200) {
 //       List<dynamic> body = jsonDecode(response.body)['data'];
 //       setState(() {

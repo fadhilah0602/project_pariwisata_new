@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isLoading = true;
       });
       http.Response res = await http.post(
-        Uri.parse('http://192.168.42.233/pariwisata/register.php'),
+        Uri.parse('http://192.168.43.99/pariwisata/register.php'),
         body: {
           "username": txtUsername.text,
           "fullname": txtFullname.text,
