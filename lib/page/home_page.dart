@@ -1298,7 +1298,7 @@ class _PageMulaiState extends State<PageMulai> with TickerProviderStateMixin {
                                 child: Image.network(
                                   // Menggunakan URL gambar dari model pariwisata
                                   'http://192.168.43.99/pariwisata/${pariwisata.gambar}',
-                                  height: 150,
+                                  height: 130,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 ),

@@ -2,39 +2,35 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:project_pariwisata_new/page/edit_pariwisata.dart';
-import 'package:project_pariwisata_new/page/penilaian_screen.dart';
-import 'package:project_pariwisata_new/page/setting.dart';
+import 'package:project_pariwisata_new/page/pesanan_screen.dart';
 
-import '../model/model_Pariwisata.dart';
+import '../model/model_Kategori.dart';
 import '../model/model_user.dart';
 import '../util/session_manager.dart';
 import 'add_kategori.dart';
-import 'add_pariwisata.dart';
 import 'add_penilaian_customers.dart';
-import 'kategori.dart';
-import 'login.dart';
+import 'home_admin_page.dart';
 import 'navigation_page.dart';
 import 'profile.dart';
 
-class PariwisataScreen extends StatefulWidget {
-  const PariwisataScreen({super.key});
-  // final ModelPariwisata pariwisata;
+class KategoriScreen extends StatefulWidget {
+  const KategoriScreen({super.key});
+  // final ModelKategori Kategori;
   //
-  // const PariwisataScreen({super.key, required this.pariwisata});
+  // const KategoriScreen({super.key, required this.Kategori});
 
 
   @override
-  State<PariwisataScreen> createState() => _PariwisataScreen();
+  State<KategoriScreen> createState() => _KategoriScreen();
 }
 
-class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObserver {
+class _KategoriScreen extends State<KategoriScreen> with WidgetsBindingObserver {
   late ModelUsers currentUser;
-  late Pariwisata pariwisata;
+  late Kategori kategori;
 
   int _selectedIndex = 1;
-  List<Pariwisata> _PariwisataList = [];
-  List<Pariwisata> _filteredPariwisataList = [];
+  List<Kategori> _kategoriList = [];
+  List<Kategori> _filteredKategoriList = [];
   bool _isLoading = true;
   TextEditingController _searchController = TextEditingController();
 
@@ -43,21 +39,21 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     getDataSession();
-    _fetchPariwisata();
+    _fetchKategori();
   }
 
-  Future<void> _fetchPariwisata() async {
+  Future<void> _fetchKategori() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.43.99/pariwisata/listPariwisata.php'));
+      final response = await http.get(Uri.parse('http://192.168.43.99/pariwisata/kategori.php'));
       if (response.statusCode == 200) {
         final parsed = jsonDecode(response.body);
         setState(() {
-          _PariwisataList = List<Pariwisata>.from(parsed['data'].map((x) => Pariwisata.fromJson(x)));
-          _filteredPariwisataList = _PariwisataList;
+          _kategoriList = List<Kategori>.from(parsed['data'].map((x) => Kategori.fromJson(x)));
+          _filteredKategoriList = _kategoriList;
           _isLoading = false;
         });
       } else {
-        throw Exception('Failed to load Pariwisata');
+        throw Exception('Failed to load Kategori');
       }
     } catch (e) {
       print('Error fetching products: $e');
@@ -68,21 +64,21 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
     }
   }
 
-  Future<void> deletePariwisata(String idPariwisata) async {
-    final String apiUrl = 'http://192.168.43.99/pariwisata/deletePariwisata.php';
+  Future<void> deleteKategori(String idKategori) async {
+    final String apiUrl = 'http://192.168.43.99/pariwisata/deleteKategori.php';
 
     final response = await http.post(
       Uri.parse(apiUrl),
-      body: {"id_pariwisata": idPariwisata},
+      body: {"id_kategori": idKategori},
     );
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       if (responseData['isSuccess']) {
         setState(() {
-          _fetchPariwisata();
-          // _PariwisataList.removeAt(idPariwisata.toString() as int);
-          // _filteredPariwisataList = List.from(_PariwisataList);
+          _fetchKategori();
+          // _KategoriList.removeAt(idKategori.toString() as int);
+          // _filteredKategoriList = List.from(_KategoriList);
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(responseData['message'])),
@@ -95,9 +91,9 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
     }
   }
 
-  void _filterPariwisataList(String query) {
+  void _filterKategoriList(String query) {
     setState(() {
-      _filteredPariwisataList = _PariwisataList.where((Pariwisata) => Pariwisata.nama_pariwisata.toLowerCase().contains(query.toLowerCase())).toList();
+      _filteredKategoriList = _kategoriList.where((Kategori) => Kategori.nama_kategori.toLowerCase().contains(query.toLowerCase())).toList();
     });
   }
 
@@ -148,13 +144,13 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
       case 1:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => PenilaianScreen()),
+          MaterialPageRoute(builder: (context) => KategoriScreen()),
         );
         break;
       case 2:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => KategoriScreen()),
+          MaterialPageRoute(builder: (context) => PesananScreen()),
         );
         break;
       case 3:
@@ -179,42 +175,8 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF88AB8E), // Sesuaikan dengan warna tema aplikasi Anda
-        automaticallyImplyLeading: false, // Untuk menghilangkan tombol back secara otomatis
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                'Welcome, ${currentUser.fullname}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingPage()),
-              );
-            },
-            icon: Icon(Icons.settings),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            },
-            icon: Icon(Icons.logout),
-          ),
-        ],
+        backgroundColor: Color(0xFFAFC8AD),
+        title: Text('Kategori Saya'),
       ),
       backgroundColor: Color(0xFFAFC8AD),
       body: _isLoading
@@ -228,9 +190,9 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _searchController,
-                onChanged: _filterPariwisataList,
+                onChanged: _filterKategoriList,
                 decoration: InputDecoration(
-                  labelText: 'Search Pariwisata',
+                  labelText: 'Search Kategori',
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(),
                 ),
@@ -238,9 +200,9 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: _filteredPariwisataList.length,
+                itemCount: _filteredKategoriList.length,
                 itemBuilder: (context, index) {
-                  final Pariwisata = _filteredPariwisataList[index];
+                  final Kategori = _filteredKategoriList[index];
                   return Card(
                     elevation: 4,
                     margin: EdgeInsets.all(8.0),
@@ -249,44 +211,34 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Gambar ditambahkan di sini
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              'http://192.168.43.99/pariwisata/${Pariwisata.gambar}', // URL gambar
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
                           SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                Pariwisata.nama_pariwisata,
+                                Kategori.nama_kategori,
                                 style: TextStyle(fontSize: 16),
                               ),
                               // IconButton(
                               //     onPressed: () {
                               //       // Buat ModelSejarawan baru dengan satu objek Datum dalam list data
-                              //       ModelPariwisata modelPariwisata =
-                              //       ModelPariwisata(
+                              //       ModelKategori modelKategori =
+                              //       ModelKategori(
                               //         isSuccess: true,
                               //         message: "Success",
                               //         data: [
-                              //           pariwisata
+                              //           Kategori
                               //         ], // Masukkan objek Datum ke dalam list data
                               //       );
                               //
                               //       // Navigasi ke halaman EditSejarawanPage dengan memberikan parameter yang diperlukan
-                              //       Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //           builder: (context) => EditPariwisataPage(
-                              //               pariwisata: modelPariwisata),
-                              //         ),
-                              //       );
+                              //       // Navigator.push(
+                              //       //   context,
+                              //       //   MaterialPageRoute(
+                              //       //     builder: (context) => EditKategoriPage(
+                              //       //         Kategori: modelKategori),
+                              //       //   ),
+                              //       // );
                               //
                               //       ScaffoldMessenger.of(context)
                               //           .showSnackBar(SnackBar(content: Text("Klikk")));
@@ -301,12 +253,12 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
                               // IconButton(
                               //   onPressed: () {
                               //     // Buat ModelSejarawan baru dengan satu objek Datum dalam list data
-                              //     ModelPariwisata modelPariwisata =
-                              //           ModelPariwisata(
+                              //     ModelKategori modelKategori =
+                              //           ModelKategori(
                               //             isSuccess: true,
                               //             message: "Success",
                               //             data: [
-                              //               pariwisata
+                              //               Kategori
                               //             ], // Masukkan objek Datum ke dalam list data
                               //           );
                               //
@@ -314,8 +266,8 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
                               //           Navigator.push(
                               //             context,
                               //             MaterialPageRoute(
-                              //               builder: (context) => EditPariwisataPage(
-                              //                   pariwisata: modelPariwisata),
+                              //               builder: (context) => EditKategoriPage(
+                              //                   Kategori: modelKategori),
                               //             ),
                               //           );
                               //   },
@@ -324,7 +276,7 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
                               // ),
                               IconButton(
                                 onPressed: () {
-                                  deletePariwisata(Pariwisata.id_pariwisata.toString());
+                                  deleteKategori(Kategori.id_kategori.toString());
                                 },
                                 icon: Icon(Icons.delete),
                                 color: Colors.red,
@@ -335,36 +287,8 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
                               //     size: 20,
                               //     color: Colors.red,
                               //   ),
-                              //   onPressed: () => deletePariwisata(Pariwisata.id_pariwisata.toString()),
+                              //   onPressed: () => deleteKategori(Kategori.id_Kategori.toString()),
                               // ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Harga:',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                'Rp. ${Pariwisata.harga}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Lokasi:',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                '${Pariwisata.lokasi}',
-                                style: TextStyle(fontSize: 16),
-                              ),
                             ],
                           ),
                         ],
@@ -383,7 +307,7 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddPariwisata(),
+              builder: (context) => AddKategori(),
             ),
           );
         },
@@ -398,7 +322,7 @@ class _PariwisataScreen extends State<PariwisataScreen> with WidgetsBindingObser
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmarks_outlined),
-            label: 'Pariwisata',
+            label: 'Kategori',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),

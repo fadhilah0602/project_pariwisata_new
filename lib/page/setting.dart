@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_pariwisata_new/page/bantuan.dart';
+import 'package:project_pariwisata_new/page/iconic.dart';
+import 'package:project_pariwisata_new/page/informasi.dart';
 
 import '../model/model_user.dart';
 import '../util/session_manager.dart';
@@ -65,6 +68,18 @@ class _SettingPageState extends State<SettingPage> {
             _buildListItem(context, Icons.security_outlined, 'Legal and Policies', trailingIcon: Icons.navigate_next, onTap: () {
               // Navigasi ke halaman LegalAndPoliciesPage
               Navigator.push(context, MaterialPageRoute(builder: (context) => LegalAndPoliciesPage()));
+            }),
+            _buildListItem(context, Icons.book, 'Sejarah Singkat', trailingIcon: Icons.navigate_next, onTap: () {
+              // Navigasi ke halaman LegalAndPoliciesPage
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Informasi()));
+            }),
+            _buildListItem(context, Icons.hotel_class, 'Tempat Iconik', trailingIcon: Icons.navigate_next, onTap: () {
+              // Navigasi ke halaman LegalAndPoliciesPage
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Iconic()));
+            }),
+            _buildListItem(context, Icons.handyman, 'Bantuan', trailingIcon: Icons.navigate_next, onTap: () {
+              // Navigasi ke halaman LegalAndPoliciesPage
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Bantuan()));
             }),
             SizedBox(height: 20), // Jarak antara daftar item dan tombol logout
             _buildLogoutButton(),

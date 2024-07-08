@@ -6,7 +6,7 @@ class LegalAndPoliciesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Legal and Policies'),
-        backgroundColor: Color(0xFF87CEEB), // Sesuaikan dengan warna tema aplikasi Anda
+        backgroundColor: Color(0xFF88AB8E), // Sesuaikan dengan warna tema aplikasi Anda
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
